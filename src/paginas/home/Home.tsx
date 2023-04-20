@@ -1,6 +1,7 @@
 import React from 'react'
 import './Home.css'
 import { Box, Button, Grid, ThemeProvider, Typography, createTheme } from '@mui/material'
+import TabPostagem from '../../components/postagens/tabpostagem/TabPostagem';
 
 const theme = createTheme({
     palette: {
@@ -38,7 +39,9 @@ function Home() {
                 <img src="https://img.freepik.com/vetores-gratis/fada-da-borboleta-voadora_96037-465.jpg?w=2000" alt="" width="500px" height="500px" />
             </Grid>
             <Grid xs={12} style={{ backgroundColor: "white" }}>
-
+            <Grid xs={12} className='postagens'>
+                <TabPostagem />
+            </Grid>
             </Grid>
         </Grid>
     </>
