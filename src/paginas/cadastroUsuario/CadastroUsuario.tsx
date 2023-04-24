@@ -113,6 +113,7 @@ function CadastroUsuario() {
                   label='Confirmar Senha'
                   margin='normal'
                   fullWidth />
+                  
                 <Box marginY={2} display={'flex'} justifyContent={'space-around'} gap={4}>
 
                       <Button onClick={back} size='large' variant='contained' color='error' fullWidth>
@@ -130,6 +131,7 @@ function CadastroUsuario() {
         </Grid>
         
       </Grid>
+      
     </>
   )
 }

@@ -1,63 +1,72 @@
-// Importar as dependências
 import React from 'react';
+import { AppBar, Toolbar, Typography} from '@material-ui/core';
+import {Box} from '@mui/material';
 import { Link } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-import Toolbar from '@material-ui/core/Toolbar';
-import AppBar from '@material-ui/core/AppBar';
-import Box from '@material-ui/core/Box';
+import {useNavigate } from 'react-router-dom'
+import useLocalStorage from 'react-use-localstorage';
+
 import './Navbar.css'
+function Navbar() {
+    const [token, setToken] = useLocalStorage('token');
+    let navigate = useNavigate();
+    
+    function goLogout(){
+        setToken('')
+        alert("Usuário deslogado")
+       navigate('/login')
+    }
+    return (
+        <>
+            <AppBar position="static" style={{ backgroundColor: '#FF0084' }}>
+                <Toolbar variant="dense">
+                    <Box className='cursor'>
+                        <Typography variant="h5" color="inherit">
+                            BlogPessoal
+                        </Typography>
+                    </Box>
 
-// Interface para as propriedades do componente
-interface NavbarProps {}
+                    <Box display="flex" justifyContent="start">
+                        <Link to="/home" className="text-decorator-none">
+                            <Box mx={1} className='cursor'>
+                                <Typography variant="h6" color="inherit">
+                                    home
+                                </Typography>
+                            </Box>
+                        </Link>
+                        <Link to="/posts" className="text-decorator-none">
+                            <Box mx={1} className='cursor'>
+                                <Typography variant="h6" color="inherit">
+                                    postagens
+                                </Typography>
+                            </Box>
+                        </Link>
+                        <Link to="/temas" className="text-decorator-none">
+                        <Box mx={1} className='cursor'>
+                            <Typography variant="h6" color="inherit">
+                                temas
+                            </Typography>
+                        </Box>
+                        </Link>
+                        <Link to="/formularioTema" className="text-decorator-none">
+                        <Box mx={1} className='cursor'>
+                            <Typography variant="h6" color="inherit">
+                                cadastrar tema
+                            </Typography>
+                        </Box>
+                        </Link>
+                      
+                            <Box mx={1} className='cursor' onClick={goLogout}>
+                                <Typography variant="h6" color="inherit">
+                                    logout
+                                </Typography>
+                            </Box>
+                        
+                    </Box>
 
-// Função Navbar
-const Navbar: React.FC<NavbarProps> = () => {
-  return (
-    <AppBar position="static" style={{ backgroundColor: '#FF0084' }}>
-      <Toolbar>
-        <Box display="flex" alignItems="center" width="100%">
-          <Box mx={1}>
-            <Typography variant="h6" color="inherit">
-              <Link to="/home" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
-                Início
-              </Link>
-            </Typography>
-          </Box>
-          <Box mx={1}>
-            <Typography variant="h6" color="inherit">
-              <Link to="/tema" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
-                Tema
-              </Link>
-            </Typography>
-          </Box>
-          <Box mx={1}>
-            <Typography variant="h6" color="inherit">
-              <Link to="/cadastrar-tema" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
-                Cadastrar Temas
-              </Link>
-            </Typography>
-          </Box>
-          <Box marginLeft="auto" display="flex"> {/* Usar Box para alinhar os elementos à direita */}
-            <Link
-              to="/login"
-              style={{
-                textDecoration: 'none',
-                color: 'inherit',
-                marginLeft: '16px',
-                cursor: 'pointer', // Adicionar o estilo do cursor como pointer
-              }}
-            >
-              
-                <Typography variant="h6" color="inherit">
-                Logout
-              </Typography>
-              
-            </Link>
-          </Box>
-        </Box>
-      </Toolbar>
-    </AppBar>
-  );
+                </Toolbar>
+            </AppBar>
+        </>
+    )
 }
 
 export default Navbar;
