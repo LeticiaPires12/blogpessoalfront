@@ -1,51 +1,78 @@
-import React from 'react'
-import './Home.css'
-import { Box, Button, Grid, ThemeProvider, Typography, createTheme } from '@mui/material'
+import React, { useEffect } from 'react';
+import { Typography, Grid, Button, createTheme} from '@material-ui/core';
+import { Box } from '@mui/material';
 import TabPostagem from '../../components/postagens/tabpostagem/TabPostagem';
+import ModalPostagem from '../../components/postagens/modalPostagem/ModalPostagem';
+import './Home.css';
+import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../store/tokens/tokensReduce';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+
 
 const theme = createTheme({
     palette: {
-      primary: {
-        main: '#D29642',
-      },
-      secondary: {
-        main : '#B85851',
-      },
+        primary: {
+            main: '#D29642',
+        },
+        secondary: {
+            main: '#B85851',
+        },
     }
-  });
+});
+
 
 function Home() {
+
+    let navigate = useNavigate();
+    const token = useSelector<TokenState, TokenState["tokens"]>(
+        (state) => state.tokens
+    );
+
+    useEffect(() => {
+        if (token == "") {
+          toast.error('Você precisa estar logado', {
+              position: "top-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+              theme: "colored",
+              progress: undefined,
+          });
+          navigate("/login")
+
+        }
+    }, [token])
     return (
-    <>
-        <Grid container className='home'>
-            <Grid alignItems="center" item xs={12} md={6} className='home_secao'>
-                <Box paddingX={20} className='home_secao-opcao'>
-                    <Typography variant="h3" className='opcao_item' component="h3" style={{fontWeight: "bold"}}>
-                        Seja bem vindo(a)!
-                    </Typography>
-                    <Typography variant="h5" className='opcao_item' component="h5">
-                        Sinta-se a vontade para expressar seus pensamentos e opiniões!
-                    </Typography>
-                </Box>
-                <Box display="flex" justifyContent="center">
-                    <Box marginRight={1}>
+        <>
+            <Grid container direction="row" justifyContent="center" alignItems="center" className='caixa'>
+                <Grid alignItems="center" item xs={6}>
+                    <Box paddingX={20} >
+                        <Typography variant="h3" gutterBottom color="textPrimary" component="h3" align="center" className='titulo'>Seja bem vindo(a)!</Typography>
+                        <Typography variant="h5" gutterBottom color="textPrimary" component="h5" align="center" className='titulo'>expresse aqui os seus pensamentos e opiniões!</Typography>
                     </Box>
-                    <ThemeProvider theme={theme}>
-                        <Button variant="contained" color='secondary' style={{ borderRadius: "20px"}}>Ver Postagens</Button>
-                    </ThemeProvider>
-                </Box>
+                    <Box display="flex" justifyContent="center">
+                        <Box marginRight={1}>
+                            <ModalPostagem />
+                        </Box>
+                        <Link to="/posts" className='text-decoration: none'>
+                        <Button variant="outlined" className='botao'>Ver Postagens</Button>
+                        </Link>
+                    </Box>
+                </Grid>
+                <Grid item xs={6} >
+                    <img src="https://img.freepik.com/vetores-gratis/fada-da-borboleta-voadora_96037-465.jpg?w=2000" alt="" width="500px" height="500px" />
+                </Grid>
+                <Grid xs={12} className='postagens'>
+                    <TabPostagem />
+                </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
-                <img src="https://img.freepik.com/vetores-gratis/fada-da-borboleta-voadora_96037-465.jpg?w=2000" alt="" width="500px" height="500px" />
-            </Grid>
-            <Grid xs={12} style={{ backgroundColor: "white" }}>
-            <Grid xs={12} className='postagens'>
-                <TabPostagem />
-            </Grid>
-            </Grid>
-        </Grid>
-    </>
-    )
+        </>
+    );
 }
 
-export default Home
+export default Home;

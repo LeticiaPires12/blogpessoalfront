@@ -1,41 +1,56 @@
 import React, {useState, useEffect} from 'react'
-import { Link, Navigate } from 'react-router-dom'
-import {Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom'
+import { Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
 import {Box} from '@mui/material';
 import Tema from '../../../models/Tema';
 import './ListaTema.css';
-import useLocalStorage from 'react-use-localstorage';
 import {useNavigate} from 'react-router-dom';
 import { busca } from '../../../services/Service';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokensReduce';
+import { toast } from 'react-toastify';
 
 function ListaTema() {
-const [temas, setTemas] = useState<Tema[]>([])
-const [token, setToken] = useLocalStorage('token');
-let history = useNavigate();
+  const [temas, setTemas] = useState<Tema[]>([])
+  let navigate = useNavigate();
+  const token = useSelector<TokenState, TokenState["tokens"]>(
+    (state) => state.tokens
+  );
 
-useEffect(()=>{
-    if (token === ''){
-        alert("Voce precisa estar logado")
-        history("/login")
+  useEffect(()=>{
+    if(token == ''){
+      toast.error('Você precisa estar logado', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+        progress: undefined,
+    });
+      navigate("/login")
     }
-}, [token])
+  }, [token])
 
-async function getTema(){
+
+  async function getTema(){
     await busca("/tema", setTemas, {
-        headers: {
-            'Authorization': token
-        }
+      headers: {
+        'Authorization': token
+      }
     })
-}
+  }
 
-useEffect(() => {
+
+  useEffect(()=>{
     getTema()
-}, [temas.length])
+  }, [temas.length])
 
   return (
     <>
     {
-        temas.map(tema => (
+      temas.map(tema =>(
       <Box m={2} >
         <Card variant="outlined">
           <CardContent>
@@ -43,7 +58,7 @@ useEffect(() => {
               Tema
             </Typography>
             <Typography variant="h5" component="h2">
-              {tema.descricao}
+             {tema.descricao}
             </Typography>
           </CardContent>
           <CardActions>
@@ -67,8 +82,8 @@ useEffect(() => {
           </CardActions>
         </Card>
       </Box>
-  ))
-}
+      ))
+      }
     </>
   );
 }
